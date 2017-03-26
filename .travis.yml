@@ -41,6 +41,6 @@ addons:
       name: "avrabe/CarND-Extended-Kalman-Filter-Project"
       description: "Build submitted via Travis CI"
     notification_email: ralf_beier@me.com
-    build_command_prepend: "mkdir build; cd build; cmake .. -G Unix\ Makefiles; make clean "
-    build_command:   "CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6 make -j 4"
+    build_command_prepend: "mkdir build; cd build; CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6  cmake .. -G Unix\ Makefiles; make clean "
+    build_command:   "make -j 4"
     branch_pattern: coverity_scan

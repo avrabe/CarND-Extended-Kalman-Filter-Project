@@ -1,3 +1,6 @@
+[![Code Climate](https://codeclimate.com/github/avrabe/CarND-Extended-Kalman-Filter-Project/badges/gpa.svg)](https://codeclimate.com/github/avrabe/CarND-Extended-Kalman-Filter-Project)
+[![Coverity](https://scan.coverity.com/projects/12191/badge.svg)](https://scan.coverity.com/projects/avrabe-carnd-extended-kalman-filter-project)
+[![Build Status](https://travis-ci.org/avrabe/CarND-Extended-Kalman-Filter-Project.svg?branch=master)](https://travis-ci.org/avrabe/CarND-Extended-Kalman-Filter-Project)
 # Extended Kalman Filter Project Starter Code
 Self-Driving Car Engineer Nanodegree Program
 

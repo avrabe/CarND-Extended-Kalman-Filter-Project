@@ -22,7 +22,7 @@ addons:
       name: "avrabe/CarND-Extended-Kalman-Filter-Project"
       description: "Build submitted via Travis CI"
     notification_email: ralf_beier@me.com
-    build_command_prepend: "mkdir build; cd build; cmake .. -G Unix\ Makefiles; make clean "
+    build_command_prepend: "mkdir -p build; cd build; cmake .. -G Unix\ Makefiles; make clean "
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
 
@@ -34,8 +34,8 @@ script:
   #- export CXX=/usr/bin/g++-6
   - gcc -v && g++ -v && cmake --version
   # Run your build commands next
-  - mkdir build
+  - mkdir -p build
   - cd build
-  - cmake .. -G "Unix Makefiles"
-  - make -j 4
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then cmake .. -G "Unix Makefiles" ; fi
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make ; fi
 

@@ -9,6 +9,7 @@ addons:
       - george-edison55-precise-backports
     packages:
       - cmake
+      - cmake-data
 script:
   - gcc -v && g++ -v && cmake --version
   # Run your build commands next

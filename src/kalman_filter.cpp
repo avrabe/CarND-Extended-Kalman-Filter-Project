@@ -2,6 +2,7 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using Eigen::Vector3d;
 
 KalmanFilter::KalmanFilter() {}
 
@@ -52,4 +53,23 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+    double_t x2 = x_[0] * x_[0];
+    double_t y2 = x_[1] * x_[1];
+    double_t sq = sqrt(x2 + y2);
+    Vector3d h_x = Vector3d();
+    h_x << sq,
+            atan2(x_[1], x_[0]),
+            (x_[0] * x_[2] + x_[1] * x_[3]) / sq;
+    VectorXd y = z - h_x;
+    MatrixXd Ht = H_.transpose();
+    MatrixXd S = H_ * P_ * Ht + R_;
+    MatrixXd Si = S.inverse();
+    MatrixXd PHt = P_ * Ht;
+    MatrixXd K = PHt * Si;
+
+    //new estimate
+    x_ = x_ + (K * y);
+    long x_size = x_.size();
+    MatrixXd I = MatrixXd::Identity(x_size, x_size);
+    P_ = (I - K * H_) * P_;
 }

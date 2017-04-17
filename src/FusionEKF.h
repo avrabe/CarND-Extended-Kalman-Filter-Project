@@ -46,6 +46,8 @@ private:
     Eigen::Matrix3d R_radar_;
   Eigen::MatrixXd H_laser_;
   Eigen::MatrixXd Hj_;
+
+    Eigen::Vector4d convertPolarToCartesian(const MeasurementPackage &measurement_pack) const;
 };
 
 #endif /* FusionEKF_H_ */

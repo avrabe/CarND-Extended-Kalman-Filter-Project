@@ -88,13 +88,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
             /**
             Convert radar from polar to cartesian coordinates and initialize state.
             */
-            double_t rho = measurement_pack.raw_measurements_[0];
-            double_t phi = measurement_pack.raw_measurements_[1];
-            double_t px = rho * cos(phi);
-            double_t py = rho * sin(phi);
-            double_t vx = 0;
-            double_t vy = 0;
-            ekf_.x_ << px, py, vx, vy;
+
+            Vector4d x_ = convertPolarToCartesian(measurement_pack);
+            ekf_.x_ = x_;
+
         } else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
             /**
             Initialize state.
@@ -159,14 +156,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
         ekf_.R_ = R_radar_;
 
-        double_t rho = measurement_pack.raw_measurements_[0];
-        double_t phi = measurement_pack.raw_measurements_[1];
-        double_t px = rho * cos(phi);
-        double_t py = rho * sin(phi);
-        double_t vx = 0;
-        double_t vy = 0;
-        Vector4d x_ = Vector4d();
-        x_ << px, py, vx, vy;
+        Vector4d x_ = convertPolarToCartesian(measurement_pack);
 
         Hj_ = tools.CalculateJacobian(x_);
         ekf_.H_ = Hj_;
@@ -184,4 +174,16 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // print the output
     //cout << "x_ = " << ekf_.x_ << endl;
     //cout << "P_ = " << ekf_.P_ << endl;
+}
+
+Vector4d FusionEKF::convertPolarToCartesian(const MeasurementPackage &measurement_pack) const {
+    double_t rho = measurement_pack.raw_measurements_[0];
+    double_t phi = measurement_pack.raw_measurements_[1];
+    double_t px = rho * cos(phi);
+    double_t py = rho * sin(phi);
+    double_t vx = 0;
+    double_t vy = 0;
+    Vector4d x_ = Vector4d();
+    x_ << px, py, vx, vy;
+    return x_;
 }

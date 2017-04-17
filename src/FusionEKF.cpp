@@ -99,7 +99,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
             /**
             Initialize state.
             */
-            ekf_.x_ << measurement_pack.raw_measurements_[0], measurement_pack.raw_measurements_[1], 0, 0;
+            double_t epsilon = 0.0001;
+            double_t px = measurement_pack.raw_measurements_[0];
+            double_t py = measurement_pack.raw_measurements_[1];
+            if (px == 0) px = epsilon;
+            if (py == 0) py = epsilon;
+            ekf_.x_ << px, py, 0, 0;
 
         }
         previous_timestamp_ = measurement_pack.timestamp_;
@@ -153,7 +158,17 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         // Radar updates
 
         ekf_.R_ = R_radar_;
-        Hj_ = tools.CalculateJacobian(ekf_.x_);
+
+        double_t rho = measurement_pack.raw_measurements_[0];
+        double_t phi = measurement_pack.raw_measurements_[1];
+        double_t px = rho * cos(phi);
+        double_t py = rho * sin(phi);
+        double_t vx = 0;
+        double_t vy = 0;
+        Vector4d x_ = Vector4d();
+        x_ << px, py, vx, vy;
+
+        Hj_ = tools.CalculateJacobian(x_);
         ekf_.H_ = Hj_;
         ekf_.UpdateEKF(measurement_pack.raw_measurements_);
 
